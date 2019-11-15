@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>SignalRDemo</AssemblyName>
+    <RootNamespace>SignalRDemo</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
