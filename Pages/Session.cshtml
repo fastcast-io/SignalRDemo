@@ -1,0 +1,20 @@
+﻿@page
+@model SignalRTest.Pages.SessionModel
+@{
+    ViewData["Title"] = "Session";
+}
+
+<h1>Session</h1>
+
+<div class="container">
+    <h2>This is where I am testing starting up a session</h2>
+    <div class="row">
+        <div class="col-2">Session code</div>
+        <div class="col-4"><input type="text" id="sessionCode" /></div>
+    </div>
+    <button id="startSession">start session</button>
+    <button id="stopSession">stop dat session</button>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/session.js"></script>
