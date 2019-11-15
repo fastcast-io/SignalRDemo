@@ -7,7 +7,7 @@ var sessionConnection = new signalR.HubConnectionBuilder().withUrl("/sessionHub"
 var mySessionCode = 42;
 
 sessionConnection.on("EngageSession", function (sessionCode) {
-    console.log(`EngageSession was called ${parseInt(sessionCode)}`)
+    console.log(`EngageSession was called with ${parseInt(sessionCode)}`)
     if (parseInt(sessionCode) === mySessionCode) {
         console.log(`Engage MY Session!!!`)
         if (window.location.pathname === "/") {
@@ -21,7 +21,7 @@ sessionConnection.on("EngageSession", function (sessionCode) {
 });
 
 sessionConnection.on("HaltSession", function (sessionCode) {
-    console.log(`HaltSession was called ${parseInt(sessionCode)}`)
+    console.log(`HaltSession was called with ${parseInt(sessionCode)}`)
     if (parseInt(sessionCode) === mySessionCode) {
         console.log(`Halt MY Session :(((!!!`)
         if (window.location.pathname === "/") {
