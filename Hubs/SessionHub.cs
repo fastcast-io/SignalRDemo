@@ -24,37 +24,50 @@ namespace SignalRChat.Hubs
             _duration = sessionDuration;
         }
 
-        public async Task StartTimer()
+        public async Task StartTimer(string sessionCode)
         {
             _duration = SessionDuration.Durations.GetOrAdd(Context.ConnectionId, _duration) as SessionDuration;
-            _duration.Elapsed += UpdateDuration;
+            _duration.Elapsed += (sender, e) => UpdateDuration(sender, e, sessionCode);
             _duration.Interval = 1000;
             _duration.Enabled = true;
         }
 
-        static void UpdateDuration(object sender, System.Timers.ElapsedEventArgs e)
+        static void UpdateDuration(object sender, System.Timers.ElapsedEventArgs e, string sessionCode)
         {
             var _duration = (SessionDuration)sender;
             //IHubClients<ISessionClient> hubClients = _duration.HubContext.Clients as IHubClients<ISessionClient>;
 
             //hubClients.All.ShowDurationLeft(DateTime.Now.ToString("T", CultureInfo.CreateSpecificCulture("en-US")));
-            _duration.HubContext.Clients.All.SendAsync(
+            _duration.HubContext.Clients.Group(sessionCode).SendAsync(
                 "ShowDurationLeft", 
                 DateTime.Now.ToString("T", CultureInfo.CreateSpecificCulture("en-US"))
             );
         }
 
-        public async Task StopTimer()
+        public async Task StopTimer(string sessionCode)
         {
             _duration = SessionDuration.Durations.GetOrAdd(Context.ConnectionId, _duration) as SessionDuration;
-            _duration.Elapsed -= UpdateDuration;
+            _duration.Elapsed -= (sender, e) => UpdateDuration(sender, e, sessionCode);
             _duration.Enabled = false;
 
             # pragma warning disable CA2007
-            await Clients.All.StopTimer();
+            await Clients.OthersInGroup(sessionCode).StopTimer();
         }
 
-        //public SessionDuration sessionDuration = new SessionDuration();
+        public async Task JoinSession(string sessionCode)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, sessionCode);
+
+            //await Clients.Group(sessionCode).SendAsync("Send", $"{Context.ConnectionId} has joined the group {sessionCode}.");
+        }
+
+        public async Task ExitSession(string groupName)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+
+            //await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has left the group {groupName}.");
+        }
+
         public async Task StartSession(string sessionCode)
         {
             //await Clients.All.SendAsync("EngageSession", sessionCode);
