@@ -10,7 +10,7 @@ sessionConnection.on("EngageSession", function (sessionCode) {
     console.log(`EngageSession was called with ${parseInt(sessionCode)}`)
     if (parseInt(sessionCode) === mySessionCode) {
         console.log(`Engage MY Session!!!`)
-        if (window.location.pathname === "/") {
+        if (window.location.pathname === "/session") {
             document.getElementById("session-started").style.display = "initial"
             document.getElementById("session-ended").style.display = "none"
         }
@@ -24,7 +24,7 @@ sessionConnection.on("HaltSession", function (sessionCode) {
     console.log(`HaltSession was called with ${parseInt(sessionCode)}`)
     if (parseInt(sessionCode) === mySessionCode) {
         console.log(`Halt MY Session :(((!!!`)
-        if (window.location.pathname === "/") {
+        if (window.location.pathname === "/session") {
             document.getElementById("session-started").style.display = "none"
             document.getElementById("session-ended").style.display = "initial"
         }
@@ -49,20 +49,20 @@ sessionConnection.on("StopTimer", function () {
 
 sessionConnection.start().then(function () {
     console.log("Connection was started")
-    if (window.location.pathname === "/session") {
+    if (window.location.pathname === "/") {
         document.getElementById("startSession").disabled = false;
         document.getElementById("stopSession").disabled = false;
         document.getElementById("startTimer").disabled = false;
         document.getElementById("stopTimer").disabled = false;
     }
     else {
-        console.log("Not on the session page? There is no button to enable")
+        console.log("Not on the index page? There is no button to enable")
     }
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
-if (window.location.pathname === "/session") { // TODO: have a better check when in production
+if (window.location.pathname === "/") { // TODO: have a better check when in production
     document.getElementById("startSession").disabled = true;
     document.getElementById("stopSession").disabled = true;
     document.getElementById("startTimer").disabled = true;
