@@ -26,5 +26,6 @@ namespace SignalRDemo
         public static ConcurrentDictionary<string, SessionDuration> Durations { get => _durations; }
 
         public IHubContext<SessionHub> HubContext => _hubContext;
+
     }
 }

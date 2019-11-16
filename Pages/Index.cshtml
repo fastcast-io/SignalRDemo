@@ -1,34 +1,49 @@
 ﻿@page
 
-<div class="container">
-    <h2>This is where I am testing starting up a session</h2>
-    <div class="row">
-        @*<div class="col-sm"></div>*@
-        <div class="col-2">Session code</div>
-        <div class="col-4"><input type="text" id="sessionCode" /></div>
-    </div>
-    <div class="row">
-        <div class="btn-group-vertical" role="group" aria-label="start-stop-session" style="padding-right:7px;">
-            <button class="btn btn-primary" id="startSession">start session</button>
-            <button class="btn btn-primary" id="stopSession">stop dat session</button>
+    <div class="container">
+        <h2>This is where I am testing starting up a session</h2>
+        <div class="row">
+            @*<div class="col-sm"></div>*@
+            <div class="col-2">Session code</div>
+            <div class="col-4"><input type="text" id="sessionCode" /></div>
         </div>
-        <div class="btn-group-vertical" role="group" aria-label="start-stop-session">
-            <button class="btn btn-warning" id="startTimer">Start timer!</button>
-            <button class="btn btn-warning" id="stopTimer">Stop timer!</button>
+        <div class="row">
+            @*<div class="col-sm"></div>*@
+            <div class="col-2">Duration</div>
+            <div class="col-4"><input type="text" id="sessionDuration" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div id="session-stats" class="btn-group-toggle" role="group" aria-label="set-unset-session">
+                <input type="button" class="btn btn-primary" id="setSessionCode" value="Join Session" />
+                <input type="button" class="btn btn-primary" id="removeSessionCode" value="Leave Session" />
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="btn-group-vertical" role="group" aria-label="start-stop-session" style="padding-right:7px;">
+                <button class="btn btn-primary" id="startSession">start session</button>
+                <button class="btn btn-primary" id="stopSession">stop dat session</button>
+            </div>
+            <div class="btn-group-vertical" role="group" aria-label="start-stop-session">
+                <button class="btn btn-warning" id="startTimer">Start timer!</button>
+                <button class="btn btn-warning" id="stopTimer">Stop timer!</button>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div id="session-stats" class="btn-group-toggle" role="group" aria-label="start-stop-session">
+                <button type="button" class="btn btn-outline-info btn-lg btn-block active">
+                    Connected participants <span id="connected-participants" class="badge badge-dark"></span>
+                </button>
+                <button type="button" class="btn btn-outline-info btn-lg btn-block active">
+                    Remaining Time (s): <span id="remaining-time" class="badge badge-dark"></span>
+                </button>
+            </div>
         </div>
     </div>
-    <br />
-    <div class="row">
-        <div id="session-stats" class="btn-group-toggle" role="group" aria-label="start-stop-session">
-            <button type="button" class="btn btn-outline-info btn-lg btn-block active">
-                Connected participants <span id="session-id" class="badge badge-dark"></span>
-            </button>
-            @*<button type="button" class="btn btn-outline-info">
-                Session <span id="session-id" class="badge badge-dark"></span>
-            </button>*@
-        </div>
-    </div>
-</div>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/session.js"></script>
