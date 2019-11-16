@@ -17,7 +17,7 @@ namespace SignalRChat.Hubs
 
     public class SessionHub : Hub<ISessionClient>
     {
-        private readonly SessionDuration _duration;
+        private SessionDuration _duration;
 
         public SessionHub(SessionDuration sessionDuration)
         {
@@ -26,6 +26,7 @@ namespace SignalRChat.Hubs
 
         public async Task StartTimer()
         {
+            _duration = SessionDuration.Durations.GetOrAdd(Context.ConnectionId, _duration) as SessionDuration;
             _duration.Elapsed += UpdateDuration;
             _duration.Interval = 1000;
             _duration.Enabled = true;
@@ -34,18 +35,22 @@ namespace SignalRChat.Hubs
         static void UpdateDuration(object sender, System.Timers.ElapsedEventArgs e)
         {
             var _duration = (SessionDuration)sender;
-            IHubClients<ISessionClient> hubClients = _duration.HubContext.Clients as IHubClients<ISessionClient>;
+            //IHubClients<ISessionClient> hubClients = _duration.HubContext.Clients as IHubClients<ISessionClient>;
 
-            hubClients.All.ShowDurationLeft(DateTime.Now.ToString("T", CultureInfo.CreateSpecificCulture("en-US")));
-            
+            //hubClients.All.ShowDurationLeft(DateTime.Now.ToString("T", CultureInfo.CreateSpecificCulture("en-US")));
+            _duration.HubContext.Clients.All.SendAsync(
+                "ShowDurationLeft", 
+                DateTime.Now.ToString("T", CultureInfo.CreateSpecificCulture("en-US"))
+            );
         }
 
         public async Task StopTimer()
         {
+            _duration = SessionDuration.Durations.GetOrAdd(Context.ConnectionId, _duration) as SessionDuration;
             _duration.Elapsed -= UpdateDuration;
             _duration.Enabled = false;
 
-            # pragma warning disable CS1998
+            # pragma warning disable CA2007
             await Clients.All.StopTimer();
         }
 

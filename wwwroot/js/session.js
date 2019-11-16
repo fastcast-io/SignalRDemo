@@ -34,22 +34,39 @@ sessionConnection.on("HaltSession", function (sessionCode) {
     }
 });
 
+sessionConnection.on("ShowDurationLeft", function (durationLeft) {
+    console.log(durationLeft)
+    document.getElementById("time-left").innerText = durationLeft;
+});
+
+sessionConnection.on("StopTimer", function () {
+    console.log("Timer stopped")
+    document.getElementById("time-left").innerText = "Timer stopped";
+    setInterval(function() {
+        document.getElementById("time-left").innerText = "";
+    }, 5000);
+});
+
 sessionConnection.start().then(function () {
     console.log("Connection was started")
     if (window.location.pathname === "/session") {
         document.getElementById("startSession").disabled = false;
         document.getElementById("stopSession").disabled = false;
+        document.getElementById("startTimer").disabled = false;
+        document.getElementById("stopTimer").disabled = false;
     }
     else {
-        console.log("On the index page, there is no button to enable")
+        console.log("Not on the session page? There is no button to enable")
     }
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
-if (window.location.pathname === "/session") {
+if (window.location.pathname === "/session") { // TODO: have a better check when in production
     document.getElementById("startSession").disabled = true;
     document.getElementById("stopSession").disabled = true;
+    document.getElementById("startTimer").disabled = true;
+    document.getElementById("stopTimer").disabled = true;
 
     document.getElementById("startSession").addEventListener("click", function (event) {
         var sessionCode = document.getElementById("sessionCode").value;
@@ -66,4 +83,22 @@ if (window.location.pathname === "/session") {
         });
         event.preventDefault();
     });
+
+    document.getElementById("startTimer").addEventListener("click", function(event) {
+        sessionConnection.invoke("StartTimer").then(function () {
+            console.log("Starting timer at", Date.now.toString())
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    })
+
+    document.getElementById("stopTimer").addEventListener("click", function(event) {
+        sessionConnection.invoke("StopTimer").then(function () {
+            console.log("Stopping timer at", Date.now.toString())
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    })
 }
